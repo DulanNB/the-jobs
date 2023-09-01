@@ -1,0 +1,47 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+  	<servlet-name>loginController</servlet-name>
+  	<display-name>loginController</display-name>
+  	<description></description>
+  	<servlet-class>com.codewithdulan.thejobs.controller.loginController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>registerController</servlet-name>
+  	<display-name>registerController</display-name>
+  	<description></description>
+  	<servlet-class>com.codewithdulan.thejobs.controller.registerController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>appoinmentController</servlet-name>
+  	<display-name>appoinmentController</display-name>
+  	<description></description>
+  	<servlet-class>com.codewithdulan.thejobs.controller.appoinmentController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>userController</servlet-name>
+  	<display-name>userController</display-name>
+  	<description></description>
+  	<servlet-class>com.codewithdulan.thejobs.controller.userController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>loginController</servlet-name>
+  	<url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>registerController</servlet-name>
+  	<url-pattern>/register</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>appoinmentController</servlet-name>
+  	<url-pattern>/appoinmentController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>userController</servlet-name>
+  	<url-pattern>/userController</url-pattern>
+  </servlet-mapping>
+</web-app>
