@@ -60,8 +60,18 @@ public class appointmentDao {
 		List<appoinment> app = new ArrayList();
 
 		while(rs.next()) {
+			int consultantId = rs.getInt("consultant_id");
+		    String consultantName;
+			 
+			 if (consultantId == 0) {
+			        // Set the default value if consultant_id is 0
+			        consultantName = "N/A";
+			    } else {
+			        // Fetch the consultant's name if consultant_id is not 0
+			        consultantName = getConsultantName(consultantId);
+			    }
 			appoinment appoinments = new appoinment(rs.getInt("id"), rs.getString("appoinment_note"),rs.getInt("user_id"),rs.getInt("consultant_id"),rs.getString("country"),rs.getString("appoinment_date")
-					,rs.getString("appoinment_time"),"dulan");
+					,rs.getString("appoinment_time"),consultantName);
 			app.add(appoinments);
 		}
 
@@ -69,6 +79,36 @@ public class appointmentDao {
 		connection.close();
 		return app ;
 	}
+
+	public static String getConsultantName(int consultantId) throws ClassNotFoundException, SQLException {
+	    DBconnector connector = new DBconnectorImplDao();
+	    Connection connection = connector.getConnection();
+
+	    String query = "SELECT UserName FROM users WHERE userID = ?";
+	    PreparedStatement preparedStatement = connection.prepareStatement(query);
+	    preparedStatement.setInt(1, consultantId);
+	    
+	    
+
+	    ResultSet rs = preparedStatement.executeQuery();
+
+	    String consultantName = null;
+	    if (rs.next()) {
+	        consultantName = rs.getString("UserName");
+	    } else {
+	        // Set a default value if no result is found
+	        consultantName = "Dulan";
+	    }
+	    
+	    System.out.println(consultantName);
+
+	    rs.close();
+	    preparedStatement.close();
+	    connection.close();
+
+	    return consultantName;
+	}
+
 	
 	public static List<appoinment> getAllAppoinmentsJobSeeker(int userId) throws ClassNotFoundException, SQLException {
 
@@ -83,8 +123,18 @@ public class appointmentDao {
 		List<appoinment> app = new ArrayList();
 
 		while(rs.next()) {
+			int consultantId = rs.getInt("consultant_id");
+		    String consultantName;
+			 
+			 if (consultantId == 0) {
+			        // Set the default value if consultant_id is 0
+			        consultantName = "N/A";
+			    } else {
+			        // Fetch the consultant's name if consultant_id is not 0
+			        consultantName = getConsultantName(consultantId);
+			    }
 			appoinment appoinments = new appoinment(rs.getInt("id"), rs.getString("appoinment_note"),rs.getInt("user_id"),rs.getInt("consultant_id"),rs.getString("country"),rs.getString("appoinment_date")
-					,rs.getString("appoinment_time"),"dulan");
+					,rs.getString("appoinment_time"),consultantName);
 			app.add(appoinments);
 		}
 
@@ -108,29 +158,19 @@ public class appointmentDao {
 
 		while(rs.next()) {
 			
-			int userID = rs.getInt("consultant_id");
-
-	        User user = null;
-	        String userQuery = "SELECT * FROM users WHERE userID = ?";
-	        PreparedStatement userStatement = connection.prepareStatement(userQuery);
-	        userStatement.setInt(1, userID);
-	        ResultSet userRS = userStatement.executeQuery();
-
-	        if (userRS.next()) {
-	            user = new User(
-	                userRS.getInt("userID"),
-	                userRS.getString("userName"),
-	                userRS.getString("email"),
-	                userRS.getString("contactNo"),
-	                userRS.getString("userPassword"),
-	                userRS.getInt("roleID")
-	            );
-	        }
-	        
-	        userStatement.close(); // Close the userStatement
+			int consultantId = rs.getInt("consultant_id");
+		    String consultantName;
+			 
+			 if (consultantId == 0) {
+			        // Set the default value if consultant_id is 0
+			        consultantName = "N/A";
+			    } else {
+			        // Fetch the consultant's name if consultant_id is not 0
+			        consultantName = getConsultantName(consultantId);
+			    }
 			
 			appoinment appoinments = new appoinment(rs.getInt("id"), rs.getString("appoinment_note"),rs.getInt("user_id"),rs.getInt("consultant_id"),rs.getString("country"),rs.getString("appoinment_date")
-					,rs.getString("appoinment_time"),(user != null) ? user.getUserName() : "" );
+					,rs.getString("appoinment_time"),consultantName );
 			app.add(appoinments);
 		}
 

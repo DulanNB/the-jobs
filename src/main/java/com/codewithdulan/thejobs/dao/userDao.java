@@ -87,14 +87,16 @@ public interface userDao {
 		DBconnector connector = new DBconnectorImplDao();
 		Connection connection =connector.getConnection();
 
-		String query = "Update users set userName=?, email=?, contactNo=?, userPassword=?, roleID=? where userID=?";
+		String query = "Update users set roleID=? where userID=?";
 		PreparedStatement ps = connection.prepareStatement(query);
-		ps.setString(1, user.getUserName());
-		ps.setString(2, user.getEmail());
-		ps.setString(3, user.getContactNo());
-		ps.setString(5, user.getUserPassword());
-		ps.setInt(6, user.getRoleID());
-		ps.setInt(7, user.getUserID());
+		
+		
+		ps.setInt(1, user.getRoleID());
+		ps.setInt(2, user.getUserID());
+		
+		
+		System.out.println(user.getRoleID());
+		System.out.println(user.getUserID());
 
 		boolean result = ps.executeUpdate() > 0;
 		ps.close();

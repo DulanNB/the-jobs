@@ -154,6 +154,8 @@ public class userController extends HttpServlet {
 
 	   String message = "";
 	   userService service = new userService();
+	   
+		System.out.println(request.getParameter("role_id"));
 
 	   User user= new User();
 	   int id = Integer.parseInt(request.getParameter("userID"));
