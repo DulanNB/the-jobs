@@ -40,7 +40,7 @@ public class loginController extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 
-		User user = new User();
+		 User user = User.getInstance();
 
 		user.setEmail(email);
 		user.setUserPassword(password);
@@ -66,6 +66,16 @@ public class loginController extends HttpServlet {
 			else if(userValidate.getRoleID()==2)
 			{
 				System.out.println("Admin");
+
+				HttpSession session = request.getSession();
+				session.setAttribute("User", userValidate);
+				request.setAttribute("userName", email);
+
+				request.getRequestDispatcher("index.jsp").forward(request, response);
+			}
+			else if(userValidate.getRoleID()==3)
+			{
+				System.out.println("Cosultant");
 
 				HttpSession session = request.getSession();
 				session.setAttribute("User", userValidate);

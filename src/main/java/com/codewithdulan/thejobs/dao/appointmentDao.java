@@ -1,12 +1,15 @@
 package com.codewithdulan.thejobs.dao;
 
 import java.sql.Connection;
+import javax.mail.*;
+import javax.mail.internet.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import com.codewithdulan.thejobs.model.User;
 import com.codewithdulan.thejobs.model.appoinment;
@@ -29,6 +32,16 @@ public class appointmentDao {
 		    appoinment appointment = null;
 
 		    if (rs.next()) {
+		    	int consultantId = rs.getInt("consultant_id");
+			    String consultantName;
+				 
+				 if (consultantId == 0) {
+				        // Set the default value if consultant_id is 0
+				        consultantName = "N/A";
+				    } else {
+				        // Fetch the consultant's name if consultant_id is not 0
+				        consultantName = getConsultantName(consultantId);
+				    }
 		        appointment = new appoinment(
 		            rs.getInt("id"),
 		            rs.getString("appoinment_note"),
@@ -37,7 +50,8 @@ public class appointmentDao {
 		            rs.getString("country"),
 		            rs.getString("appoinment_date"),
 		            rs.getString("appoinment_time"),
-		            "dulan" // You might want to fetch this from the result set too
+		            consultantName ,
+		            rs.getString("status")// You might want to fetch this from the result set too
 		        );
 		    }
 
@@ -71,7 +85,7 @@ public class appointmentDao {
 			        consultantName = getConsultantName(consultantId);
 			    }
 			appoinment appoinments = new appoinment(rs.getInt("id"), rs.getString("appoinment_note"),rs.getInt("user_id"),rs.getInt("consultant_id"),rs.getString("country"),rs.getString("appoinment_date")
-					,rs.getString("appoinment_time"),consultantName);
+					,rs.getString("appoinment_time"),consultantName,rs.getString("status"));
 			app.add(appoinments);
 		}
 
@@ -134,7 +148,7 @@ public class appointmentDao {
 			        consultantName = getConsultantName(consultantId);
 			    }
 			appoinment appoinments = new appoinment(rs.getInt("id"), rs.getString("appoinment_note"),rs.getInt("user_id"),rs.getInt("consultant_id"),rs.getString("country"),rs.getString("appoinment_date")
-					,rs.getString("appoinment_time"),consultantName);
+					,rs.getString("appoinment_time"),consultantName,rs.getString("status"));
 			app.add(appoinments);
 		}
 
@@ -158,7 +172,7 @@ public class appointmentDao {
 
 		while(rs.next()) {
 			
-			int consultantId = rs.getInt("consultant_id");
+			int consultantId = rs.getInt("user_id");
 		    String consultantName;
 			 
 			 if (consultantId == 0) {
@@ -170,7 +184,7 @@ public class appointmentDao {
 			    }
 			
 			appoinment appoinments = new appoinment(rs.getInt("id"), rs.getString("appoinment_note"),rs.getInt("user_id"),rs.getInt("consultant_id"),rs.getString("country"),rs.getString("appoinment_date")
-					,rs.getString("appoinment_time"),consultantName );
+					,rs.getString("appoinment_time"),consultantName , rs.getString("status"));
 			app.add(appoinments);
 		}
 
@@ -184,7 +198,7 @@ public class appointmentDao {
 		DBconnector connector = new DBconnectorImplDao();
 		Connection connection =connector.getConnection();
 
-		String query = "Insert into appoinments (appoinment_note,user_id,appoinment_date,appoinment_time,country) values (?,?,?,?,?)";
+		String query = "Insert into appoinments (appoinment_note,user_id,appoinment_date,appoinment_time,country,status) values (?,?,?,?,?,?)";
 		System.out.println(query);
 		PreparedStatement ps = connection.prepareStatement(query);
 		ps.setString(1, appoinment.getAppoinmentNote());
@@ -192,6 +206,7 @@ public class appointmentDao {
 		ps.setString(3, appoinment.getAppoinmentDate());
 		ps.setString(4, appoinment.getAppoinmentTime());
 		ps.setString(5, appoinment.getCountry());
+		ps.setString(6, appoinment.getStatus());
 		
 		System.out.println(ps);
 
@@ -221,6 +236,115 @@ public class appointmentDao {
 		ps.close();
 		connection.close();
 		return result;
+	}
+	
+	public static boolean updateAdminAppoinment(appoinment appoinment) throws ClassNotFoundException, SQLException {
+
+		DBconnector connector = new DBconnectorImplDao();
+		Connection connection =connector.getConnection();
+
+		System.out.println(appoinment.getConsultantId());
+		System.out.println(appoinment.getAppoinmentID());
+		
+		String query = "Update appoinments set consultant_id=? where id=?";
+		PreparedStatement ps = connection.prepareStatement(query);
+		ps.setInt(1, appoinment.getConsultantId());
+		ps.setInt(2, appoinment.getAppoinmentID()); // Set ID to index 7
+
+		boolean result = ps.executeUpdate() > 0;
+		ps.close();
+		connection.close();
+		return result;
+	}
+	
+	public static boolean acceptAppoinment(appoinment appoinment) throws ClassNotFoundException, SQLException, MessagingException {
+
+		DBconnector connector = new DBconnectorImplDao();
+		Connection connection =connector.getConnection();
+
+		
+		System.out.println(appoinment.getUserID());
+		
+		String query = "Update appoinments set status=? where id=?";
+		PreparedStatement ps = connection.prepareStatement(query);
+		ps.setString(1, "Accepted");
+		ps.setInt(2, appoinment.getAppoinmentID()); // Set ID to index 7
+
+		boolean result = ps.executeUpdate() > 0;
+		if (result) {
+	       
+	        //sendEmail(appoinment);
+	    }
+		ps.close();
+		connection.close();
+		return result;
+	}
+	
+	public static void sendEmail(appoinment appoinment) throws MessagingException, SQLException, ClassNotFoundException {
+	   
+	    String host = "smtp.mailtrap.io";
+	    String username = "b50832bf2d0ec2";
+	    String password = "3a5ec1fb711409";
+
+	    Properties props = new Properties();
+	    props.put("mail.smtp.host", host);
+	    props.put("mail.smtp.auth", "true");
+
+	 
+	    Session session = Session.getInstance(props, new Authenticator() {
+	        protected PasswordAuthentication getPasswordAuthentication() {
+	            return new PasswordAuthentication(username, password);
+	        }
+	    });
+
+	    try {
+	       
+	        User user = getUserByUserID(appoinment.getUserID()); 
+
+	   
+	        Message message = new MimeMessage(session);
+	        message.setFrom(new InternetAddress(username));
+	        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
+	        message.setSubject("Appointment Status Update");
+	        message.setText("Your appointment with ID " + appoinment.getAppoinmentID() + " has been accepted.");
+
+	     
+	        Transport.send(message);
+
+	        System.out.println("Email sent successfully.");
+	    } catch (MessagingException e) {
+	        throw new RuntimeException(e);
+	    }
+	}
+
+	
+	public static User getUserByUserID(int userID) throws ClassNotFoundException, SQLException {
+	    DBconnector connector = new DBconnectorImplDao();
+	    Connection connection = connector.getConnection();
+
+	    String query = "SELECT * FROM users WHERE userID = ?";
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    ps.setInt(1, userID);
+
+	    ResultSet rs = ps.executeQuery();
+
+	    User user = null;
+	    if (rs.next()) {
+	        user = new User(
+	            rs.getInt("userID"),
+	            rs.getString("userName"),
+	            rs.getString("email"),
+	            rs.getString("contactNo"),
+	            rs.getString("userPassword"),
+	            rs.getInt("roleID")
+	        );
+	    }
+
+	    rs.close();
+	    ps.close();
+	    connection.close();
+
+	    return user;
 	}
 
 	public static boolean deleteAppointment(int appointmentId) throws ClassNotFoundException, SQLException {

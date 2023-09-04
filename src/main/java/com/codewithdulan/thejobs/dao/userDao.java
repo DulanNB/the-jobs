@@ -26,7 +26,7 @@ public interface userDao {
 
 		ResultSet rs = ps.executeQuery();
 
-		User user = new User();
+		 User user = User.getInstance();
 		if(rs.next()) {
 
 			user.setUserID(rs.getInt("userID"));
@@ -117,5 +117,25 @@ public interface userDao {
 		ps.close();
 		connection.close();
 		return result;
+	}
+
+	public static List<User> getAllConsultants() throws ClassNotFoundException, SQLException {
+		DBconnector connector = new DBconnectorImplDao();
+		Connection connection =connector.getConnection();
+
+		String query = "Select * from users where roleID = 3";
+		Statement st = connection.createStatement();
+		ResultSet rs = st.executeQuery(query);
+
+		List<User> users = new ArrayList();
+
+		while(rs.next()) {
+			User user = new User(rs.getInt("userID"), rs.getString("userName"),rs.getString("email"),rs.getString("contactNo"),rs.getString("userPassword"),rs.getInt("roleID"));
+			users.add(user);
+		}
+
+		st.close();
+		connection.close();
+		return users;
 	}
 }

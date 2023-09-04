@@ -44,13 +44,47 @@ if (request.getSession(false).getAttribute("User") == null) {
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Appointments </h1>
                     
-                    
+                    <%
+						String successMessage = request.getParameter("successMessage");
+						if (successMessage != null && !successMessage.isEmpty()) {
+						%>
+						<div class="alert alert-success">
+						    <%= successMessage %>
+						</div>
+						<script>
+						    
+						    function removeQueryParameter(key) {
+						        var url = window.location.href;
+						        var urlParts = url.split("?");
+						        if (urlParts.length >= 2) {
+						            var params = urlParts[1].split("&");
+						            var newParams = [];
+						            for (var i = 0; i < params.length; i++) {
+						                var param = params[i].split("=");
+						                if (param[0] !== key) {
+						                    newParams.push(params[i]);
+						                }
+						            }
+						            var newUrl = urlParts[0] + "?" + newParams.join("&");
+						            window.history.replaceState({}, document.title, newUrl);
+						        }
+						    }
+						
+						 
+						    removeQueryParameter("successMessage");
+						</script>
+						<%
+						}
+						%>
+						                    
 			                		<% 
 						                // Display the error message if it's available
 						                Object suceessMessage = request.getAttribute("successMessage");
+			                		
 						                if (suceessMessage != null) {
 						            %>
 						            <div class="alert alert-success mt-2">
+						           
 						                <%= suceessMessage %>
 						            </div>
 						            <%
@@ -104,6 +138,7 @@ if (request.getSession(false).getAttribute("User") == null) {
 								            <th>Country</th>
 								            <th>Consultant</th>
 								            <th>Appointment Date</th>
+								            <th>Status</th>
 								            <th>Action</th>
 								        </tr>
 								    </thead>
@@ -117,25 +152,56 @@ if (request.getSession(false).getAttribute("User") == null) {
 								            <td><%= appointment.getCountry() %></td>
 								            <td><%= appointment.getConsultant() %></td>
 								            <td><%= appointment.getAppoinmentDate() %></td>
+								             <td><%= appointment.getStatus() %></td>
 								            <td>
 								            <% 
 								   
-												    if (loggedInUser != null && loggedInUser.getRoleID() == 1) { // Assuming user's role_id is 1
+												    if (loggedInUser != null && (loggedInUser.getRoleID() == 1)) {
 												%>
 												<a method="get" href="<%=request.getContextPath()%>/appoinmentController?action=by_id&id=<%= appointment.getAppoinmentID() %>">
 												                    <button class="btn btn-primary">Edit</button>
 												                </a>
 												<% } %>
 												
+												  <% 
+								   
+												    if (loggedInUser != null && (loggedInUser.getRoleID() == 2)) { 
+												%>
+												<a method="get" href="<%=request.getContextPath()%>/appoinmentController?action=admin_by_id&id=<%= appointment.getAppoinmentID() %>">
+												                    <button class="btn btn-primary">Edit</button>
+												                </a>
+												<% } %>
+												
+												
+												  <%-- <% 
+								   
+												    if (loggedInUser != null && (loggedInUser.getRoleID() == 1)) { 
+												%>
+												<a method="get" href="<%=request.getContextPath()%>/appoinmentController?action=update&id=<%= appointment.getAppoinmentID() %>">
+												                    <button class="btn btn-primary">Edit</button>
+												                </a>
+												<% } %> --%>
+												
 												<% 
 								   
-												    if (loggedInUser != null && (loggedInUser.getRoleID() == 2 || loggedInUser.getRoleID() == 1)) { // Assuming user's role_id is 1
+												    if (loggedInUser != null && (loggedInUser.getRoleID() == 3)) { 
+												%>
+												<a method="post" href="<%=request.getContextPath()%>/appoinmentController?action=accept_consultant&id=<%= appointment.getAppoinmentID() %>">
+												                    <button class="btn btn-success">Accept</button>
+												                </a>
+												<% } %>
+								                
+												
+												<% 
+								   
+												    if (loggedInUser != null ) { 
 												%>
 												<a method="get" href="<%=request.getContextPath()%>/appoinmentController?action=delete&id=<%= appointment.getAppoinmentID() %>">
 												                    <button class="btn btn-danger">Delete</button>
 												                </a>
 												<% } %>
-								                
+												
+												
 								            </td>
 								            
 								            

@@ -3,6 +3,8 @@ package com.codewithdulan.thejobs.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import com.codewithdulan.thejobs.dao.appointmentDao;
 import com.codewithdulan.thejobs.model.appoinment;
 
@@ -46,5 +48,14 @@ public class appoinmentService {
 	public boolean updateAppointment(appoinment user) throws ClassNotFoundException, SQLException {
 		return appointmentDao.updateAppoinment(user);
 	}
+	
+	public boolean updateAdminAppointment(appoinment user) throws ClassNotFoundException, SQLException {
+		return appointmentDao.updateAdminAppoinment(user);
+	}
+
+	public boolean acceptAppointment(appoinment user) throws ClassNotFoundException, SQLException, MessagingException {
+		return appointmentDao.acceptAppoinment(user);
+	}
+	
 
 }

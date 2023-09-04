@@ -1,9 +1,11 @@
 package com.codewithdulan.thejobs.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -56,8 +58,19 @@ public class appoinmentController extends HttpServlet {
 		        else if (action.equals("update")) {
 		        	updateAppoinment(request, response);
 		        }
+		        else if (action.equals("admin_by_id") && (roleID == 2)) {
+		        	getAppointmentAdminById(request, response);
+		        }
 		        else if (action.equals("delete")) {
 		        	deleteAppoinment(request, response);
+		        }
+		    	else if (action.equals("accept_consultant") && (roleID == 3) ) {
+		        	try {
+						acceptAppoinment(request, response);
+					} catch (ServletException | IOException | MessagingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 		        }
 		         else {
 		            response.sendRedirect("unauthorized.jsp"); 
@@ -67,6 +80,36 @@ public class appoinmentController extends HttpServlet {
 		        response.sendRedirect("login.jsp"); 
 		    }
 		
+	}
+	
+	private void getAppointmentAdminById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String message ="";
+		int id = Integer.parseInt(request.getParameter("id"));
+
+		appoinmentService service = new appoinmentService();
+		try {
+			appoinment appoinment = service.getAppoinmentByID(id);
+			System.out.println(appoinment);
+			if(appoinment==null){
+				message = "There is no any appointment to show";
+			}
+			request.setAttribute("appointment", appoinment);
+			
+			List<User> consultants = userService.getAllConsultants(); // Replace userService with your actual service
+	        request.setAttribute("consultants", consultants);
+	        
+	        System.out.println(consultants);
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			message =e.getMessage();
+		}
+		
+		request.setAttribute("message", message);
+
+		RequestDispatcher rd = request.getRequestDispatcher("adminEditAppointment2.jsp");
+		
+		rd.forward(request, response);
 	}
 
 	private void getAppointmentById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -123,7 +166,7 @@ public class appoinmentController extends HttpServlet {
 	    
 	    HttpSession session = request.getSession();
 	    User loggedInUser = (User) session.getAttribute("User");
-	    int userID = loggedInUser.getRoleID();
+	    int userID = loggedInUser.getUserID();
 	    
 	        appoinmentService service = new appoinmentService();
 	        try {
@@ -159,7 +202,7 @@ public class appoinmentController extends HttpServlet {
 	    
 	    HttpSession session = request.getSession();
 	    User loggedInUser = (User) session.getAttribute("User");
-	    int userID = loggedInUser.getRoleID();
+	    int userID = loggedInUser.getUserID();
 	    
 	        appoinmentService service = new appoinmentService();
 	        try {
@@ -178,7 +221,7 @@ public class appoinmentController extends HttpServlet {
 
 	    request.setAttribute("message", message);
 
-	    RequestDispatcher rd = request.getRequestDispatcher("mobile-user-jstl.jsp");
+	    RequestDispatcher rd = request.getRequestDispatcher("jobseeker.jsp");
 	    rd.forward(request, response);
 		
 	}
@@ -199,6 +242,66 @@ public class appoinmentController extends HttpServlet {
 		{
 			deleteAppoinment(request,response);
 		}
+		else if (action.equals("admin_update")) {
+        	updateAdminAppoinment(request, response);
+        }
+		else if (action.equals("accept_consultant")) {
+        	try {
+				acceptAppoinment(request, response);
+			} catch (ServletException | IOException | MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+	}
+	
+	private void acceptAppoinment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, MessagingException {
+		HttpSession session = request.getSession();
+        User loggedInUser = (User) session.getAttribute("User");
+        appoinmentService service = new appoinmentService();
+        
+        int appointmentId = Integer.parseInt(request.getParameter("id"));
+
+        appoinment existingAppointment;
+        try {
+            existingAppointment = service.getAppoinmentByID(appointmentId);
+            
+            if (existingAppointment == null) {
+
+                request.setAttribute("errorMessage", "Appointment not found.");
+                String redirectURL = "/the-jobs/appoinmentController?action=consultant";
+                response.sendRedirect(redirectURL);
+                return;
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+
+            request.setAttribute("errorMessage", "Error fetching appointment.");
+            String redirectURL = "/the-jobs/appoinmentController?action=consultant";
+            response.sendRedirect(redirectURL);
+            return;
+        }
+
+        
+        
+        System.out.println( existingAppointment);
+        boolean result;
+        try {
+            result = service.acceptAppointment(existingAppointment);
+            if (result) {
+                request.setAttribute("successMessage", "Appointment Updated Successfully.");
+            } else {
+                request.setAttribute("errorMessage", "Failed to update appointment.");
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            // Handle exception
+            request.setAttribute("errorMessage", "Failed to update appointment.");
+        }
+        request.setAttribute("successMessage", "Appointment Updated Successfully.");
+        String encodedMessage = URLEncoder.encode("Appointment Accepted Successfully.", "UTF-8");
+        String redirectURL = "/the-jobs/appoinmentController?action=consultant&successMessage="+ encodedMessage;;
+        response.sendRedirect(redirectURL);
+       
+		
 	}
 	
 	private void deleteAppoinment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -231,12 +334,64 @@ public class appoinmentController extends HttpServlet {
 	        } catch (ClassNotFoundException | SQLException e) {
 	            message = e.getMessage();
 	        }
-		   
+	        request.setAttribute("successMessage", "Appointment Deleted Successfully.");
 		   
 		   RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
 		   rd.forward(request, response);
 		
 	}
+	
+	private void updateAdminAppoinment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+        User loggedInUser = (User) session.getAttribute("User");
+        appoinmentService service = new appoinmentService();
+        
+        int appointmentId = Integer.parseInt(request.getParameter("id"));
+
+        // Retrieve the existing appointment
+        appoinment existingAppointment;
+        try {
+            existingAppointment = service.getAppoinmentByID(appointmentId);
+            
+            if (existingAppointment == null) {
+                // Handle case when appointment does not exist
+                request.setAttribute("errorMessage", "Appointment not found.");
+                String redirectURL = "/the-jobs/appoinmentController?action=admin_by_id&id=" + appointmentId;
+                response.sendRedirect(redirectURL);
+                return;
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            // Handle exception
+            request.setAttribute("errorMessage", "Error fetching appointment.");
+            String redirectURL = "/the-jobs/appoinmentController?action=admin_by_id&id=" + appointmentId;
+            response.sendRedirect(redirectURL);
+            return;
+        }
+
+        // Update the existing appointment with new values
+        
+        existingAppointment.setConsultantId(Integer.parseInt(request.getParameter("consultat_id")));
+        
+        System.out.println( existingAppointment);
+        boolean result;
+        try {
+            result = service.updateAdminAppointment(existingAppointment);
+            if (result) {
+                request.setAttribute("successMessage", "Appointment Updated Successfully.");
+            } else {
+                request.setAttribute("errorMessage", "Failed to update appointment.");
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            // Handle exception
+            request.setAttribute("errorMessage", "Failed to update appointment.");
+        }
+        
+        // Forward back to the edit page
+        String redirectURL = "/the-jobs/appoinmentController?action=admin_by_id&id=" + appointmentId;
+        response.sendRedirect(redirectURL);
+		
+	}
+	
 
 	private void updateAppoinment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
@@ -309,6 +464,7 @@ public class appoinmentController extends HttpServlet {
 			   appointment.setAppoinmentDate(request.getParameter("appointment_date"));
 			   appointment.setAppoinmentTime(request.getParameter("appointment_time"));
 			   appointment.setCountry(request.getParameter("country"));
+			   appointment.setStatus("Pending");
 			   
 			    boolean result;
 			  

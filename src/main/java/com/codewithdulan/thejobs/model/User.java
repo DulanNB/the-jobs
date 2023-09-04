@@ -8,9 +8,20 @@ public class User {
 	   private String userPassword;
 	   private int roleID;
 
-	   public User() {
 
-	   }
+	   private static User instance;
+	   
+	   private User() {
+	    }
+
+	  
+	    public static User getInstance() {
+	        if (instance == null) {
+	            instance = new User();
+	        }
+	        return instance;
+	    }
+
 
 		public User(String userName, String email, String contactNo, String userPassword, int roleID) {
 			super();

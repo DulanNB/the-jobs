@@ -10,12 +10,13 @@ public class appoinment {
 	   private String appoinment_time;
 	   private String country;
 	   private String consultant;
+	   private String status;
 	 
 	   public appoinment() {
 
 	   }
 	   
-	public appoinment(int id, String appoinment_note, int user_id, int consultant_id, String country, String appoinment_date,String appoinment_time,String consultant) {
+	public appoinment(int id, String appoinment_note, int user_id, int consultant_id, String country, String appoinment_date,String appoinment_time,String consultant,String status) {
 		super();
 		this.id = id;
 		this.appoinment_note = appoinment_note;
@@ -25,6 +26,7 @@ public class appoinment {
 		this.appoinment_date = appoinment_date;
 		this.appoinment_time = appoinment_time;
 		this.consultant = consultant;
+		this.status = status;
 	}
 	
 	
@@ -88,6 +90,14 @@ public class appoinment {
 	
 	public void setCountry(String country) {
 		this.country = country;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

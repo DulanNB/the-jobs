@@ -8,7 +8,10 @@
             action = "action=job_seeker";
         } else if (loggedInUser.getRoleID() == 2) {
             action = "action=all";
+        } else if (loggedInUser.getRoleID() == 3) {
+            action = "action=consultant";
         }
+        
     }
 %>
 <!DOCTYPE html>
@@ -17,14 +20,14 @@
     <!-- Other head elements -->
 
     <script>
-        // Wait for the page to load
+        
         document.addEventListener("DOMContentLoaded", function() {
-            // Set the timeout for redirection
+
             setTimeout(function() {
-                // Redirect to the specified URL
+               
                 var redirectURL = "http://localhost:8080/the-jobs/appoinmentController?" + "<%= action %>";
                 window.location.href = redirectURL;
-            }, 1); // Wait for 5 seconds before redirecting
+            }, 1); 
         });
     </script>
 </head>

@@ -26,7 +26,7 @@ public class loginDao {
 		 User user1 = null;
 
 		 if (rs.next()) {
-		     user1 = new User();
+			 user1 = User.getInstance();
 		     user1.setEmail(rs.getString("email"));
 		     user1.setUserPassword(rs.getString("userPassword"));
 		     user1.setRoleID(rs.getInt("roleID"));

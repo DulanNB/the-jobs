@@ -6,13 +6,7 @@
 <% 
 request.getSession().removeAttribute("message");
  //In case, if User session is not set, redirect to Login page.
-if (request.getSession(false).getAttribute("User") != null) {
-	String username = (String) request.getSession().getAttribute("User");
-    out.println("Username in session: " + username);
-    %>
-    <jsp:forward page="login.jsp"></jsp:forward>
-    <%
-} 
+
 %>
 	<!DOCTYPE html>
 <html lang="en">

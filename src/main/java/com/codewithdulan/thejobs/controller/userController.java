@@ -103,7 +103,7 @@ public class userController extends HttpServlet {
 	   userService service = new userService();
 	   int userID = Integer.parseInt(request.getParameter("id"));
 
-	   User user= new User();
+	   User user = User.getInstance();
 	   try {
 		    user = service.getSpecifiUserByUserId(userID);
 		    if(user.getUserName().isEmpty() ) {
@@ -125,7 +125,7 @@ public class userController extends HttpServlet {
 	   String message = "";
 	   userService service = new userService();
 
-	   User user= new User();
+	   User user = User.getInstance();
 	   user.setUserName(request.getParameter("name"));
 	  
 	   user.setContactNo(request.getParameter("contactNo"));
@@ -157,7 +157,7 @@ public class userController extends HttpServlet {
 	   
 		System.out.println(request.getParameter("role_id"));
 
-	   User user= new User();
+		 User user = User.getInstance();
 	   int id = Integer.parseInt(request.getParameter("userID"));
 	   user.setUserID(Integer.parseInt(request.getParameter("userID")));
 	   user.setUserName(request.getParameter("user_name"));

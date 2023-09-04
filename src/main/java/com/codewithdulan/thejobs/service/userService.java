@@ -31,4 +31,9 @@ public class userService {
 
 		return userDao.deleteUser(userID);
 	}
+
+	public static List<User> getAllConsultants() throws ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		return userDao.getAllConsultants();
+	}
 }

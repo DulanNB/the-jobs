@@ -44,7 +44,7 @@ public class registerController extends HttpServlet {
 		   String message = "";
 		   userService service = new userService();
 
-		   User user= new User();
+		   User user = User.getInstance();
 		   user.setUserName(request.getParameter("userName"));
 		   user.setEmail(request.getParameter("email"));
 		   user.setContactNo(request.getParameter("contactNo"));
