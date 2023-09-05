@@ -55,15 +55,14 @@ public class appoinmentController extends HttpServlet {
 		        }  else if (action.equals("by_id")) {
 		            getAppointmentById(request, response);
 		        }
-		        else if (action.equals("update")) {
-		        	updateAppoinment(request, response);
-		        }
-		        else if (action.equals("admin_by_id") && (roleID == 2)) {
-		        	getAppointmentAdminById(request, response);
-		        }
 		        else if (action.equals("delete")) {
 		        	deleteAppoinment(request, response);
 		        }
+		      
+		        else if (action.equals("admin_by_id") && (roleID == 2)) {
+		        	getAppointmentAdminById(request, response);
+		        }
+		    
 		    	else if (action.equals("accept_consultant") && (roleID == 3) ) {
 		        	try {
 						acceptAppoinment(request, response);
@@ -281,8 +280,6 @@ public class appoinmentController extends HttpServlet {
             return;
         }
 
-        
-        
         System.out.println( existingAppointment);
         boolean result;
         try {
@@ -319,7 +316,8 @@ public class appoinmentController extends HttpServlet {
 		   
 		    
 		    User loggedInUser = (User) session.getAttribute("User");
-		    int userID = loggedInUser.getRoleID();
+		    int userID = loggedInUser.getUserID();
+		    int roleID = loggedInUser.getRoleID();
 
 		 
 	        try {
@@ -334,10 +332,29 @@ public class appoinmentController extends HttpServlet {
 	        } catch (ClassNotFoundException | SQLException e) {
 	            message = e.getMessage();
 	        }
-	        request.setAttribute("successMessage", "Appointment Deleted Successfully.");
-		   
-		   RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-		   rd.forward(request, response);
+	        
+	        if(roleID == 1) {
+	        	  request.setAttribute("successMessage", "Appointment Deleted Successfully.");
+	  	        String encodedMessage = URLEncoder.encode("Appointment Deleted Successfully.", "UTF-8");
+	  	        String redirectURL = "/the-jobs/appoinmentController?action=job_seeker&successMessage="+ encodedMessage;;
+	  	        response.sendRedirect(redirectURL);
+	        }
+	        if(roleID == 2) {
+	        	  request.setAttribute("successMessage", "Appointment Deleted Successfully.");
+	  	        String encodedMessage = URLEncoder.encode("Appointment Deleted Successfully.", "UTF-8");
+	  	        String redirectURL = "/the-jobs/appoinmentController?action=consultant&successMessage="+ encodedMessage;;
+	  	        response.sendRedirect(redirectURL);
+	        }
+	        if(roleID == 3) {
+	        	  request.setAttribute("successMessage", "Appointment Deleted Successfully.");
+	  	        String encodedMessage = URLEncoder.encode("Appointment Deleted Successfully.", "UTF-8");
+	  	        String redirectURL = "/the-jobs/appoinmentController?action=all&successMessage="+ encodedMessage;;
+	  	        response.sendRedirect(redirectURL);
+	        }
+	    
+	        
+	      
+		 
 		
 	}
 	
@@ -356,14 +373,16 @@ public class appoinmentController extends HttpServlet {
             if (existingAppointment == null) {
                 // Handle case when appointment does not exist
                 request.setAttribute("errorMessage", "Appointment not found.");
-                String redirectURL = "/the-jobs/appoinmentController?action=admin_by_id&id=" + appointmentId;
+                String encodedMessage = URLEncoder.encode("Appointment Updated Successfully.", "UTF-8");
+                String redirectURL = "/the-jobs/appoinmentController?action=admin_by_id&id=" + appointmentId +"&successMessage="+ encodedMessage;
                 response.sendRedirect(redirectURL);
                 return;
             }
         } catch (ClassNotFoundException | SQLException e) {
             // Handle exception
             request.setAttribute("errorMessage", "Error fetching appointment.");
-            String redirectURL = "/the-jobs/appoinmentController?action=admin_by_id&id=" + appointmentId;
+            String encodedMessage = URLEncoder.encode("Appointment Updated Successfully.", "UTF-8");
+            String redirectURL = "/the-jobs/appoinmentController?action=admin_by_id&id=" + appointmentId +"&successMessage="+ encodedMessage;
             response.sendRedirect(redirectURL);
             return;
         }
@@ -386,8 +405,9 @@ public class appoinmentController extends HttpServlet {
             request.setAttribute("errorMessage", "Failed to update appointment.");
         }
         
-        // Forward back to the edit page
-        String redirectURL = "/the-jobs/appoinmentController?action=admin_by_id&id=" + appointmentId;
+        String encodedMessage = URLEncoder.encode("Appointment Updated Successfully.", "UTF-8");
+        String redirectURL = "/the-jobs/appoinmentController?action=admin_by_id&id=" + appointmentId +"&successMessage="+ encodedMessage;
+        response.sendRedirect(redirectURL);
         response.sendRedirect(redirectURL);
 		
 	}
@@ -408,14 +428,16 @@ public class appoinmentController extends HttpServlet {
             if (existingAppointment == null) {
                 // Handle case when appointment does not exist
                 request.setAttribute("errorMessage", "Appointment not found.");
-                String redirectURL = "/the-jobs/appoinmentController?action=by_id&id=" + appointmentId;
+                String encodedMessage = URLEncoder.encode("Appointment Updated Successfully.", "UTF-8");
+                String redirectURL = "/the-jobs/appoinmentController?action=by_id&id=" + appointmentId +"&successMessage="+ encodedMessage;
                 response.sendRedirect(redirectURL);
                 return;
             }
         } catch (ClassNotFoundException | SQLException e) {
             // Handle exception
             request.setAttribute("errorMessage", "Error fetching appointment.");
-            String redirectURL = "/the-jobs/appoinmentController?action=by_id&id=" + appointmentId;
+            String encodedMessage = URLEncoder.encode("Appointment Updated Successfully.", "UTF-8");
+            String redirectURL = "/the-jobs/appoinmentController?action=by_id&id=" + appointmentId +"&successMessage="+ encodedMessage;
             response.sendRedirect(redirectURL);
             return;
         }
@@ -426,7 +448,7 @@ public class appoinmentController extends HttpServlet {
         existingAppointment.setAppoinmentDate(request.getParameter("appointment_date"));
         existingAppointment.setAppoinmentTime(request.getParameter("appointment_time"));
         existingAppointment.setCountry(request.getParameter("country"));
-        System.out.println( existingAppointment);
+        
         boolean result;
         try {
             result = service.updateAppointment(existingAppointment);
@@ -440,8 +462,8 @@ public class appoinmentController extends HttpServlet {
             request.setAttribute("errorMessage", "Failed to update appointment.");
         }
         
-        // Forward back to the edit page
-        String redirectURL = "/the-jobs/appoinmentController?action=by_id&id=" + appointmentId;
+        String encodedMessage = URLEncoder.encode("Appointment Updated Successfully.", "UTF-8");
+        String redirectURL = "/the-jobs/appoinmentController?action=by_id&id=" + appointmentId +"&successMessage="+ encodedMessage;
         response.sendRedirect(redirectURL);
 		
 	}

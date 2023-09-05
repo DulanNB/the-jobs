@@ -42,6 +42,63 @@ if (request.getSession(false).getAttribute("User") == null) {
 
 				 <div class="card">
 			        <h5 class="card-header">Edit Items</h5>
+			        
+			        <%
+						String successMessage = request.getParameter("successMessage");
+						if (successMessage != null && !successMessage.isEmpty()) {
+						%>
+						<div class="alert alert-success">
+						    <%= successMessage %>
+						</div>
+						<script>
+						    function removeQueryParameter(key) {
+						        var url = window.location.href;
+						        var urlParts = url.split("?");
+						        if (urlParts.length >= 2) {
+						            var params = urlParts[1].split("&");
+						            var newParams = [];
+						            for (var i = 0; i < params.length; i++) {
+						                var param = params[i].split("=");
+						                if (param[0] !== key) {
+						                    newParams.push(params[i]);
+						                }
+						            }
+						            var newUrl = urlParts[0] + "?" + newParams.join("&");
+						            window.history.replaceState({}, document.title, newUrl);
+						        }
+						    }
+						
+						    removeQueryParameter("successMessage");
+						</script>
+						<%
+						}
+						%>
+						                    
+			                		<% 
+						                // Display the error message if it's available
+						                Object suceessMessage = request.getAttribute("successMessage");
+			                		
+						                if (suceessMessage != null) {
+						            %>
+						            <div class="alert alert-success mt-2">
+						           
+						                <%= suceessMessage %>
+						            </div>
+						            <%
+						                }
+						            %>
+			                					    <% 
+						                // Display the error message if it's available
+						                Object errMessage = request.getAttribute("errorMessage");
+						                if (errMessage != null) {
+						            %>
+						            <div class="alert alert-danger mt-2">
+						                <%= errMessage %>
+						            </div>
+						            <%
+						                }
+						            %>
+			        
 			        <div class="card-body">
 									            <%
 						    appoinment appointment = (appoinment) request.getAttribute("appointment");
@@ -97,22 +154,22 @@ if (request.getSession(false).getAttribute("User") == null) {
 						    
 						    <% 
 						                // Display the error message if it's available
-						                Object suceessMessage = request.getAttribute("successMessage");
-						                if (suceessMessage != null) {
+						                Object suceess = request.getAttribute("successMessage");
+						                if (suceess != null) {
 						            %>
 						            <div class="alert alert-success mt-2">
-						                <%= suceessMessage %>
+						                <%= suceess %>
 						            </div>
 						            <%
 						                }
 						            %>
 			                					    <% 
 						                // Display the error message if it's available
-						                Object errMessage = request.getAttribute("errorMessage");
-						                if (errMessage != null) {
+						                Object err = request.getAttribute("errorMessage");
+						                if (err != null) {
 						            %>
 						            <div class="alert alert-danger mt-2">
-						                <%= errMessage %>
+						                <%= err %>
 						            </div>
 						            <%
 						                }

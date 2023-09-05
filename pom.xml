@@ -30,11 +30,19 @@
         <artifactId>javax.mail</artifactId>
         <version>1.6.2</version> <!-- Use the latest version available -->
     </dependency>
+ 	<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-api</artifactId>
+    <version>5.8.1</version>
+    <scope>test</scope>
+</dependency>
+    
+    <!-- Mockito for mocking objects in tests -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>3.12.4</version>
+        <scope>test</scope>
     </dependency>
      <dependency>
        <groupId>javax.servlet</groupId>
@@ -49,6 +57,11 @@
      <dependency>
      	<groupId>new-mobile1</groupId>
      	<artifactId>new-mobile1</artifactId>
+     	<version>0.0.1-SNAPSHOT</version>
+     </dependency>
+     <dependency>
+     	<groupId>com.dulan.maven</groupId>
+     	<artifactId>code-with-dulan</artifactId>
      	<version>0.0.1-SNAPSHOT</version>
      </dependency>
   </dependencies>
