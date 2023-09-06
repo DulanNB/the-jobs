@@ -273,7 +273,7 @@ public class appointmentDao {
 		boolean result = ps.executeUpdate() > 0;
 		if (result) {
 	       
-	        //sendEmail(appoinment);
+	        sendEmail(appoinment);
 	    }
 		ps.close();
 		connection.close();
@@ -288,6 +288,8 @@ public class appointmentDao {
 
 	    Properties props = new Properties();
 	    props.put("mail.smtp.host", host);
+	    props.put("mail.smtp.port", "587");
+	    props.put("mail.smtp.starttls.enable", "true");
 	    props.put("mail.smtp.auth", "true");
 
 	 
@@ -305,11 +307,29 @@ public class appointmentDao {
 	        Message message = new MimeMessage(session);
 	        message.setFrom(new InternetAddress(username));
 	        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
-	        message.setSubject("Appointment Status Update");
-	        message.setText("Your appointment with ID " + appoinment.getAppoinmentID() + " has been accepted.");
+	        message.setSubject("Exciting News: Your Appointment Update!");
 
-	     
-	        Transport.send(message);
+	        // Create a more attractive and informative email body
+	        int appointmentID = appoinment.getAppoinmentID();
+	        String emailBody = "<html><body>"
+	                + "<h2 style='color: #007bff;'>Dear " + user.getUserName() + ",</h2>"
+	                + "<p>We are thrilled to inform you about your appointment status update!</p>"
+	                + "<p>Your appointment with <strong>Appointment ID: APPNT-" + appointmentID + "</strong> has been accepted.</p>"
+	                + "<p>Here are the details:</p>"
+	                + "<ul>"
+	                + "<li><strong>Appointment Date:</strong> " + appoinment.getAppoinmentDate() + "</li>"
+	                		+ "<li><strong>Appointment Time:</strong> " + appoinment.getAppoinmentTime() + "</li>"
+	                + "<li><strong>Details:</strong> If you didnt recived meeting link via our agent do not hesitate to reach us on 0111111111</li>"
+	                + "</ul>"
+	                + "<p>Thank you for choosing our service. We look forward to serving you!</p>"
+	                + "<p>Best regards,</p>"
+	                + "<p>The Jobs Team</p>"
+	                + "</body></html>";
+
+	        message.setContent(emailBody, "text/html; charset=utf-8");
+
+	    
+	     Transport.send(message);
 
 	        System.out.println("Email sent successfully.");
 	    } catch (MessagingException e) {

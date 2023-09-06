@@ -5,9 +5,7 @@
    <%@page import="java.util.*"%>
     <%
 	User auth = (User) request.getSession().getAttribute("auth");
-	if (auth != null) {
-		response.sendRedirect("jobseeker.jsp");
-	}
+
 	%>
 	<!DOCTYPE html>
 <html lang="en">

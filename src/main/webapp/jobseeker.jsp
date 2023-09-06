@@ -147,7 +147,7 @@ if (request.getSession(false).getAttribute("User") == null) {
 								            for (appoinment appointment : appointments) {
 								        %>
 								        <tr>
-								            <td><%= appointment.getAppoinmentID() %></td>
+								            <td> APPNT-<%= appointment.getAppoinmentID() %></td>
 								            <td><%= appointment.getAppoinmentNote() %></td>
 								            <td><%= appointment.getCountry() %></td>
 								            <td><%= appointment.getConsultant() %></td>

@@ -18,11 +18,23 @@
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Appointments</span></a>
             </li>
+            
+              <% 
+              User user = (User) session.getAttribute("User");
+        if (user != null && user.getRoleID() == 1) { 
+    %>
+    <li class="nav-item">
+        <a class="nav-link" href="createAppointment.jsp">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Create Appointment</span>
+        </a>
+    </li>
+    <% } %>
 
-            <!-- Nav Item - User Management -->
+           
     <% 
-        User user = (User) session.getAttribute("User");
-        if (user != null && user.getRoleID() == 2) { // Assuming admin's role_id is 2
+       
+        if (user != null && user.getRoleID() == 2) { 
     %>
     <li class="nav-item">
         <a class="nav-link" href="<%=request.getContextPath()%>/userController?action=all">
@@ -31,6 +43,13 @@
         </a>
     </li>
     <% } %>
+    
+    <li class="nav-item">
+        <a class="nav-link" href="login.jsp">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
