@@ -1,6 +1,7 @@
 package com.codewithdulan.thejobs.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -35,12 +36,18 @@ public class userController extends HttpServlet {
 		    
 		    if (loggedInUser != null) {
 		        int roleID = loggedInUser.getRoleID();
+		        
+		        System.out.println(roleID+ "role id");
 
 		        if(action.equals("all") && (roleID == 2)) {
 					getAllUsers(request,response);
 				}
 				else if ( action.equals("by_id") && (roleID == 2)){
 					getSpecificUsers(request,response);
+				}
+				else if(action.equals("update") && (roleID == 2))
+				{
+					updateUser(request,response);
 				}
 		         else {
 		            response.sendRedirect("unauthorized.jsp"); 
@@ -99,11 +106,16 @@ public class userController extends HttpServlet {
 
    private void getSpecificUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+	   HttpSession session = request.getSession();
+	    User loggedInUser = (User) session.getAttribute("User");
+	    int id = loggedInUser.getUserID();
+	   
 	   String message = "";
 	   userService service = new userService();
 	   int userID = Integer.parseInt(request.getParameter("id"));
 
 	   User user = User.getInstance();
+	  
 	   try {
 		    user = service.getSpecifiUserByUserId(userID);
 		    if(user.getUserName().isEmpty() ) {
@@ -117,6 +129,18 @@ public class userController extends HttpServlet {
 	    request.setAttribute("user", user);
 		RequestDispatcher rd = request.getRequestDispatcher("editUser.jsp");
 		rd.forward(request, response);
+		
+		
+		System.out.println(user.getRoleID()+"role get"+id);
+		 try {
+			    user = service.getSpecifiUserByUserId(id);
+			    if(user.getUserName().isEmpty() ) {
+			    	message = "There is no any user under User Id:" +userID;
+			    }
+		   } catch (ClassNotFoundException | SQLException e) {
+			   message = e.getMessage();
+		   }
+		System.out.println(user.getRoleID()+"role get2");
 
 	}
 
@@ -157,31 +181,23 @@ public class userController extends HttpServlet {
 	   
 		System.out.println(request.getParameter("role_id"));
 
-		 User user = User.getInstance();
 	   int id = Integer.parseInt(request.getParameter("userID"));
-	   user.setUserID(Integer.parseInt(request.getParameter("userID")));
-	   user.setUserName(request.getParameter("user_name"));
-	   user.setEmail(request.getParameter("email"));
-	  
-	   user.setContactNo(request.getParameter("contact_no"));
-	   
-	 
-	   user.setRoleID(Integer.parseInt(request.getParameter("role_id")));
+	   int role_id = Integer.parseInt(request.getParameter("role_id"));
 
 	   try {
-		 boolean result = service.updateUser(user);
-	     if(result) {
-			message = "The user has been updated successfully! User ID:" + user.getUserID();
-		 }
-	     else {
-	    	 message = "Failed to update the user! User ID:" + user.getUserID();
-	     }
+		 boolean result = service.updateUser(id,role_id);
+	   
 	   }
 	   catch (ClassNotFoundException | SQLException e) {
 			message = e.getMessage();
 	   }
+	   
+	   User user = User.getInstance();
+	   System.out.println(user.getRoleID()+"role here");
+	   
+		String encodedMessage = URLEncoder.encode("User Role updated Successfully.", "UTF-8");
 
-	   String redirectURL = "/the-jobs/userController?action=by_id&id=" + id;
+	   String redirectURL = "/the-jobs/userController?action=by_id&id="+id+"&successMessage="+ encodedMessage;
        response.sendRedirect(redirectURL);
    }
 
@@ -197,9 +213,9 @@ public class userController extends HttpServlet {
 	   }
 
 	   HttpSession session = request.getSession();
-	   session.setAttribute("deleteMessage", message);
+	   session.setAttribute("successMessage", message);
 
-	   response.sendRedirect("/new-mobile/getUsers?action=all");
+	   response.sendRedirect("/the-jobs/userController?action=all");
    }
 
 

@@ -22,9 +22,9 @@ public class userService {
 		return userDao.addUser(user);
 	}
 
-	public  boolean updateUser(User user) throws ClassNotFoundException, SQLException {
+	public  boolean updateUser(int id, int role_id) throws ClassNotFoundException, SQLException {
 
-		return userDao.updateUser(user);
+		return userDao.updateUser(id,role_id);
 	}
 
 	public  boolean deleteUser(int userID) throws ClassNotFoundException, SQLException {

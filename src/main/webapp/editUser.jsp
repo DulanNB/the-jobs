@@ -43,6 +43,38 @@ if (request.getSession(false).getAttribute("User") == null) {
 
 				 <div class="card">
 			        <h5 class="card-header">Edit Users</h5>
+			        
+			        <%
+						String successMessage = request.getParameter("successMessage");
+						if (successMessage != null && !successMessage.isEmpty()) {
+						%>
+						<div class="alert alert-success">
+						    <%= successMessage %>
+						</div>
+						<script>
+						    function removeQueryParameter(key) {
+						        var url = window.location.href;
+						        var urlParts = url.split("?");
+						        if (urlParts.length >= 2) {
+						            var params = urlParts[1].split("&");
+						            var newParams = [];
+						            for (var i = 0; i < params.length; i++) {
+						                var param = params[i].split("=");
+						                if (param[0] !== key) {
+						                    newParams.push(params[i]);
+						                }
+						            }
+						            var newUrl = urlParts[0] + "?" + newParams.join("&");
+						            window.history.replaceState({}, document.title, newUrl);
+						        }
+						    }
+						
+						    removeQueryParameter("successMessage");
+						</script>
+						<%
+						}
+						%>
+			        
 			        <div class="card-body">
 									            <%
 									            User User = (User) request.getAttribute("user");

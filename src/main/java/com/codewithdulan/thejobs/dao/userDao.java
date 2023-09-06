@@ -82,7 +82,7 @@ public interface userDao {
 		return result;
 	}
 
-	public static boolean updateUser(User user) throws ClassNotFoundException, SQLException {
+	public static boolean updateUser(int id, int role_id) throws ClassNotFoundException, SQLException {
 
 		DBconnector connector = new DBconnectorImplDao();
 		Connection connection =connector.getConnection();
@@ -91,12 +91,12 @@ public interface userDao {
 		PreparedStatement ps = connection.prepareStatement(query);
 		
 		
-		ps.setInt(1, user.getRoleID());
-		ps.setInt(2, user.getUserID());
+		ps.setInt(1, role_id);
+		ps.setInt(2, id);
 		
 		
-		System.out.println(user.getRoleID());
-		System.out.println(user.getUserID());
+		System.out.println(id);
+		System.out.println(role_id);
 
 		boolean result = ps.executeUpdate() > 0;
 		ps.close();

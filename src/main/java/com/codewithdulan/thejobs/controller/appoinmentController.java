@@ -333,27 +333,28 @@ public class appoinmentController extends HttpServlet {
 	            message = e.getMessage();
 	        }
 	        
-	        if(roleID == 1) {
-	        	  request.setAttribute("successMessage", "Appointment Deleted Successfully.");
-	  	        String encodedMessage = URLEncoder.encode("Appointment Deleted Successfully.", "UTF-8");
-	  	        String redirectURL = "/the-jobs/appoinmentController?action=job_seeker&successMessage="+ encodedMessage;;
-	  	        response.sendRedirect(redirectURL);
-	        }
-	        if(roleID == 2) {
-	        	  request.setAttribute("successMessage", "Appointment Deleted Successfully.");
-	  	        String encodedMessage = URLEncoder.encode("Appointment Deleted Successfully.", "UTF-8");
-	  	        String redirectURL = "/the-jobs/appoinmentController?action=consultant&successMessage="+ encodedMessage;;
-	  	        response.sendRedirect(redirectURL);
-	        }
-	        if(roleID == 3) {
-	        	  request.setAttribute("successMessage", "Appointment Deleted Successfully.");
-	  	        String encodedMessage = URLEncoder.encode("Appointment Deleted Successfully.", "UTF-8");
-	  	        String redirectURL = "/the-jobs/appoinmentController?action=all&successMessage="+ encodedMessage;;
-	  	        response.sendRedirect(redirectURL);
-	        }
+//	        if(roleID == 1) {
+//	        	  request.setAttribute("successMessage", "Appointment Deleted Successfully.");
+//	  	        String encodedMessage = URLEncoder.encode("Appointment Deleted Successfully.", "UTF-8");
+//	  	        String redirectURL = "/the-jobs/appoinmentController?action=job_seeker&successMessage="+ encodedMessage;;
+//	  	        response.sendRedirect(redirectURL);
+//	        }
+//	        if(roleID == 2) {
+//	        	  request.setAttribute("successMessage", "Appointment Deleted Successfully.");
+//	  	        String encodedMessage = URLEncoder.encode("Appointment Deleted Successfully.", "UTF-8");
+//	  	        String redirectURL = "/the-jobs/appoinmentController?action=consultant&successMessage="+ encodedMessage;;
+//	  	        response.sendRedirect(redirectURL);
+//	        }
+//	        if(roleID == 3) {
+//	        	  request.setAttribute("successMessage", "Appointment Deleted Successfully.");
+//	  	        String encodedMessage = URLEncoder.encode("Appointment Deleted Successfully.", "UTF-8");
+//	  	        String redirectURL = "/the-jobs/appoinmentController?action=all&successMessage="+ encodedMessage;;
+//	  	        response.sendRedirect(redirectURL);
+//	        }
 	    
 	        
-	      
+	        RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+		    rd.forward(request, response);
 		 
 		
 	}
@@ -408,7 +409,7 @@ public class appoinmentController extends HttpServlet {
         String encodedMessage = URLEncoder.encode("Appointment Updated Successfully.", "UTF-8");
         String redirectURL = "/the-jobs/appoinmentController?action=admin_by_id&id=" + appointmentId +"&successMessage="+ encodedMessage;
         response.sendRedirect(redirectURL);
-        response.sendRedirect(redirectURL);
+        
 		
 	}
 	
