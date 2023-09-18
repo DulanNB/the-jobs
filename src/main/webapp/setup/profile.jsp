@@ -1,5 +1,15 @@
-
-
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" isELIgnored="false"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<% 
+if (request.getSession(false).getAttribute("User") == null) {
+	String username = (String) request.getSession().getAttribute("User");
+    out.println("Username in session: " + username);
+    %>
+    <jsp:forward page="login.jsp"></jsp:forward>
+    <%
+} 
+%>
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
@@ -29,7 +39,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Dulan</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"> Dulan</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>

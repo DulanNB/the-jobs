@@ -187,7 +187,7 @@ if (request.getSession(false).getAttribute("User") == null) {
 												    if (loggedInUser != null && (loggedInUser.getRoleID() == 3)) { 
 												%>
 												<a method="post" href="<%=request.getContextPath()%>/appoinmentController?action=accept_consultant&id=<%= appointment.getAppoinmentID() %>">
-												                    <button class="btn btn-success">Accept</button>
+												                    <button class="btn btn-success">Accept and send email</button>
 												                </a>
 												<% } %>
 								                

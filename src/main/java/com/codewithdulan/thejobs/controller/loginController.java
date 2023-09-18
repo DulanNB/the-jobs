@@ -59,7 +59,8 @@ public class loginController extends HttpServlet {
 				HttpSession session = request.getSession();
 
 				session.setAttribute("User", userValidate);
-				request.setAttribute("userName", email);
+				request.setAttribute("userName", userValidate.getUserName());
+				request.setAttribute("email", userValidate.getEmail());
 
 				request.getRequestDispatcher("index.jsp").forward(request, response);
 			}
@@ -69,7 +70,8 @@ public class loginController extends HttpServlet {
 
 				HttpSession session = request.getSession();
 				session.setAttribute("User", userValidate);
-				request.setAttribute("userName", email);
+				request.setAttribute("userName", userValidate.getUserName());
+				request.setAttribute("email", userValidate.getEmail());
 
 				request.getRequestDispatcher("index.jsp").forward(request, response);
 			}
@@ -79,7 +81,8 @@ public class loginController extends HttpServlet {
 
 				HttpSession session = request.getSession();
 				session.setAttribute("User", userValidate);
-				request.setAttribute("userName", email);
+				request.setAttribute("userName", userValidate.getUserName());
+				request.setAttribute("email", userValidate.getEmail());
 
 				request.getRequestDispatcher("index.jsp").forward(request, response);
 			}

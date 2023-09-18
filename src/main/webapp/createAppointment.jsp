@@ -42,81 +42,74 @@ if (request.getSession(false).getAttribute("User") == null) {
 				 <div class="card">
 			        <h5 class="card-header">Add Items</h5>
 			        <div class="card-body">
-			            <form method="post" action="<%=request.getContextPath()%>/appoinmentController"  >
-			               
-			                <div class="form-group">
-			                    <label for="inputTitle" class="col-form-label">Appointment Note <span class="text-danger">*</span></label>
-			                    <textarea id="appointment_note" type="text" name="appointment_note" placeholder="Note"   class="form-control"></textarea>
-			                   
-			                </div>
-			
-							<div class="form-group">
-							    <label for="appointment_datetime" class="col-form-label">Appointment Date</label>
-							    <div class="well">
-							        <div id="datetimepicker1" class="input-group date">
-							            <input id="appointment_date" data-format="dd/MM/yyyy HH:mm:ss" type="date" name="appointment_date" class="form-control"></input>
-							      
+			            <form method="post" action="<%=request.getContextPath()%>/appoinmentController">
+							    <div class="form-group">
+							        <label for="inputTitle" class="col-form-label">Appointment Note <span class="text-danger">*</span></label>
+							        <textarea id="appointment_note" type="text" name="appointment_note" placeholder="Note" class="form-control" required></textarea>
+							        <!-- The 'required' attribute makes this field mandatory -->
+							    </div>
+							
+							    <div class="form-group">
+							        <label for="appointment_datetime" class="col-form-label">Appointment Date</label>
+							        <div class="well">
+							            <div id="datetimepicker1" class="input-group date">
+							                <input id="appointment_date" data-format="dd/MM/yyyy HH:mm:ss" type="date" name="appointment_date" class="form-control"></input>
+							            </div>
 							        </div>
 							    </div>
-							</div>
-
-			                
-			                
-			                <div class="form-group">
-							    <label for="appointment_datetime" class="col-form-label">Appointment Time</label>
-							    <div class="well">
-							        <div id="datetimepicker1" class="input-group date">
-							            <input id="appointment_time" data-format="dd/MM/yyyy HH:mm:ss" type="time" name="appointment_time" class="form-control"></input>
-							      
+							
+							    <div class="form-group">
+							        <label for="appointment_datetime" class="col-form-label">Appointment Time</label>
+							        <div class="well">
+							            <div id="datetimepicker1" class="input-group date">
+							                <input id="appointment_time" data-format="dd/MM/yyyy HH:mm:ss" type="time" name="appointment_time" class="form-control"></input>
+							            </div>
 							        </div>
 							    </div>
-							</div>
-			
-							 <div class="form-group">
-						        <label for="inputCountry" class="col-form-label mb-10">Country Looking For <span class="text-danger">*</span></label>
-						        <select id="country" name="country" class="form-control">
-						            <option value="" selected disabled>Select a country</option>
-						            <option value="USA">United States</option>
-						            <option value="CAN">Canada</option>
-						            <option value="UK">United Kingdom</option>
-						            <option value="SIN">Singapore</option>
-						            <option value="AUS">Australia</option>
-						         
-						        </select>
-    						</div>
-    						
-    						<input type="hidden" name="action" value="add"></input>
-			
-			                <div class="form-group mb-3" style="margin-top:65px">
-			                    <button type="reset" class="btn btn-warning">Reset</button>
-			                    <button class="btn btn-success" type="submit">Submit</button>
-			                </div>
-			                
-			                		<% 
-						                // Display the error message if it's available
-						                Object suceessMessage = request.getAttribute("successMessage");
-						                if (suceessMessage != null) {
-						            %>
-						            <div class="alert alert-success mt-2">
-						                <%= suceessMessage %>
-						            </div>
-						            <%
-						                }
-						            %>
-			                					    <% 
-						                // Display the error message if it's available
-						                Object errMessage = request.getAttribute("errorMessage");
-						                if (errMessage != null) {
-						            %>
-						            <div class="alert alert-danger mt-2">
-						                <%= errMessage %>
-						            </div>
-						            <%
-						                }
-						            %>
-			                
-			                
-			            </form>
+							
+							    <div class="form-group">
+							        <label for="inputCountry" class="col-form-label mb-10">Country Looking For <span class="text-danger">*</span></label>
+							        <select id="country" name="country" class="form-control" required>
+							            <option value="" selected disabled>Select a country</option>
+							            <option value="USA">United States</option>
+							            <option value="CAN">Canada</option>
+							            <option value="UK">United Kingdom</option>
+							            <option value="SIN">Singapore</option>
+							            <option value="AUS">Australia</option>
+							        </select>
+							    </div>
+							
+							    <input type="hidden" name="action" value="add"></input>
+							
+							    <div class="form-group mb-3" style="margin-top:65px">
+							        <button type="reset" class="btn btn-warning">Reset</button>
+							        <button class="btn btn-success" type="submit" onclick="return validateForm();">Submit</button>
+							    </div>
+							
+							    <!-- Display success and error messages -->
+							    <% 
+							    // Display the success message if it's available
+							    Object successMessage = request.getAttribute("successMessage");
+							    if (successMessage != null) {
+							    %>
+							    <div class="alert alert-success mt-2">
+							        <%= successMessage %>
+							    </div>
+							    <%
+							    }
+							    %>
+							    <% 
+							    // Display the error message if it's available
+							    Object errorMessage = request.getAttribute("errorMessage");
+							    if (errorMessage != null) {
+							    %>
+							    <div class="alert alert-danger mt-2">
+							        <%= errorMessage %>
+							    </div>
+							    <%
+							    }
+							    %>
+							</form>
 			        </div>
              </div>
             
@@ -134,6 +127,21 @@ if (request.getSession(false).getAttribute("User") == null) {
     <%@include file="setup/footersrc.jsp" %>
 
 </body>
+
+<script>
+    function validateForm() {
+        var note = document.getElementById("appointment_note").value;
+        var date = document.getElementById("appointment_date").value;
+        var time = document.getElementById("appointment_time").value;
+
+        if (note === "" || date === "" || time === "") {
+            alert("All fields marked with * are required.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
 
 <script type="text/javascript">
     $(document).ready(function() {

@@ -55,26 +55,29 @@
                                      
                                     <form class="user" action="<%=request.getContextPath()%>/login" method="post">
 									    <div class="form-group">
-									        <input type="email" class="form-control form-control-user" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+									        <input type="email" class="form-control form-control-user" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter Email Address..." required>
+									        <!-- The 'required' attribute makes this field mandatory -->
 									    </div>
 									    <div class="form-group">
-									        <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Password">
+									        <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Password" required>
+									        <!-- The 'required' attribute makes this field mandatory -->
 									    </div>
 									    <button type="submit" class="btn btn-primary btn-user btn-block">
 									        Login
 									    </button>
-															    <% 
-						                // Display the error message if it's available
-						                Object errMessage = request.getAttribute("errMessage");
-						                if (errMessage != null) {
-						            %>
-						            <div class="alert alert-danger mt-2">
-						                <%= errMessage %>
-						            </div>
-						            <%
-						                }
-						            %>
+									    <% 
+									        // Display the error message if it's available
+									        Object errMessage = request.getAttribute("errMessage");
+									        if (errMessage != null) {
+									    %>
+									    <div class="alert alert-danger mt-2">
+									        <%= errMessage %>
+									    </div>
+									    <%
+									        }
+									    %>
 									</form>
+
 									 <div class="text-center">
                                         <a class="small" href="register.jsp">Create an Account!</a>
                                     </div>
