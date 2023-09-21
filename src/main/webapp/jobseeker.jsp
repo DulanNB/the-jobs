@@ -119,7 +119,7 @@ if (request.getSession(false).getAttribute("User") == null) {
 								
 														  <% 
 								    User loggedInUser = (User) session.getAttribute("User");
-								    if (loggedInUser != null && loggedInUser.getRoleID() == 1) { // Assuming user's role_id is 1
+								    if (loggedInUser != null && loggedInUser.getRoleID() == 1) { 
 								%>
 								<a href="createAppointment.jsp" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add Appointment"><i class="fas fa-plus"></i> Add Appointment</a>
 								<% } %>
@@ -136,8 +136,18 @@ if (request.getSession(false).getAttribute("User") == null) {
 								            <th>ID</th>
 								            <th>Note</th>
 								            <th>Country</th>
-								            <th>Consultant</th>
-								            <th>Appointment Date</th>
+														            <%
+						                            if (loggedInUser != null && loggedInUser.getRoleID() == 3) { 
+						                        %>
+						                        <th>Job Seeker</th>
+						                        <%
+						                            } else {
+						                        %>
+						                        <th>Consultant</th>
+						                        <%
+						                            }
+						                        %>
+											<th>Appointment Date</th>
 								            <th>Status</th>
 								            <th>Action</th>
 								        </tr>
@@ -150,7 +160,23 @@ if (request.getSession(false).getAttribute("User") == null) {
 								            <td> APPNT-<%= appointment.getAppoinmentID() %></td>
 								            <td><%= appointment.getAppoinmentNote() %></td>
 								            <td><%= appointment.getCountry() %></td>
-								            <td><%= appointment.getConsultant() %></td>
+													           <td>
+					                            <%
+					                                if (loggedInUser != null && (loggedInUser.getRoleID() == 3)) { 
+					                            %>
+					                            <a method="get" href="<%=request.getContextPath()%>/userController?action=by_id&id=<%= appointment.getUserID() %>">
+					                                <%= appointment.getConsultant() %>
+					                            </a>
+					                            <%
+					                                } else {
+					                            %>
+					                           
+					                                <%= appointment.getConsultant() %>
+					                           
+					                            <%
+					                                }
+					                            %>
+					                        </td>
 								            <td><%= appointment.getAppoinmentDate() %></td>
 								             <td><%= appointment.getStatus() %></td>
 								            <td>

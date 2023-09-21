@@ -44,7 +44,11 @@ request.getSession().removeAttribute("message");
                     <div class="col-lg-7">
                         <div class="p-5">
                         <br>
-     									<p>${message}</p>
+                        <div class="alert alert-success mt-2">
+						                ${message}
+						            </div>
+						            
+     					
   										<br>
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
@@ -52,28 +56,40 @@ request.getSession().removeAttribute("message");
                             <form class="user" action="<%=request.getContextPath()%>/register" method="post">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" name="userName" id="userName" placeholder="Your Name" required="required"/>
+                                        <input required type="text" class="form-control form-control-user" name="userName" id="userName" placeholder="Your Name" required="required"/>
                                     </div>
                                     <!-- <div class="col-sm-6">
                                          <input type="text" class="form-control form-control-user" name="name" id="name" placeholder="Your Name" required="required"/>
                                     </div> -->
                                 </div>
                                 <div class="form-group">
-                                     <input type="text" class="form-control form-control-user" name="email" id="email" placeholder="Email Address" required="required"/>
+                                     <input required type="text" class="form-control form-control-user" name="email" id="email" placeholder="Email Address" required="required"/>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user"
+                                        <input required type="password" class="form-control form-control-user"
                                             id="userPassword" name="userPassword" placeholder="Password">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="number" class="form-control form-control-user"
+                                        <input required type="number" class="form-control form-control-user"
                                             id="contactNo" name="contactNo"placeholder="Contact Number">
                                     </div>
                                 </div>
                                <button type="submit" class="btn btn-primary btn-user btn-block">
 									        Register Account
 									    </button>
+									    
+									    <% 
+									        // Display the error message if it's available
+									        Object errMessage = request.getAttribute("errMessage");
+									        if (errMessage != null) {
+									    %>
+									    <div class="alert alert-danger mt-2">
+									        <%= errMessage %>
+									    </div>
+									    <%
+									        }
+									    %>
                                 <hr>
                               
                             </form>

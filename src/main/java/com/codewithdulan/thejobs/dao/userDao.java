@@ -41,6 +41,8 @@ public interface userDao {
 		connection.close();
 		return user;
 	}
+	
+	
 
 	public static List<User> getAllUsers() throws ClassNotFoundException, SQLException {
 
@@ -137,5 +139,31 @@ public interface userDao {
 		st.close();
 		connection.close();
 		return users;
+	}
+
+
+
+	public static boolean checkUserExist(String email) throws ClassNotFoundException, SQLException {
+		
+		DBconnector connector = new DBconnectorImplDao();
+		Connection connection =connector.getConnection();
+
+	    String query = "SELECT COUNT(*) FROM users WHERE email = ?";
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    ps.setString(1, email);
+	    ResultSet rs = ps.executeQuery();
+
+	    if (rs.next()) {
+	        int count = rs.getInt(1);
+	        rs.close();
+	        ps.close();
+	        connection.close();
+	        return count > 0;
+	    }
+
+	    rs.close();
+	    ps.close();
+	    connection.close();
+	    return false;
 	}
 }

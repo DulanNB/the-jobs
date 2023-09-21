@@ -40,7 +40,7 @@ if (request.getSession(false).getAttribute("User") == null) {
             <div class="container-fluid">
 
 				 <div class="card">
-			        <h5 class="card-header">Add Items</h5>
+			        <h5 class="card-header">Create Appointments</h5>
 			        <div class="card-body">
 			            <form method="post" action="<%=request.getContextPath()%>/appoinmentController">
 							    <div class="form-group">
@@ -50,19 +50,19 @@ if (request.getSession(false).getAttribute("User") == null) {
 							    </div>
 							
 							    <div class="form-group">
-							        <label for="appointment_datetime" class="col-form-label">Appointment Date</label>
+							        <label for="appointment_datetime" class="col-form-label">Appointment Date <span class="text-danger">*</span></label>
 							        <div class="well">
 							            <div id="datetimepicker1" class="input-group date">
-							                <input id="appointment_date" data-format="dd/MM/yyyy HH:mm:ss" type="date" name="appointment_date" class="form-control"></input>
+							                <input id="appointment_date" data-format="dd/MM/yyyy HH:mm:ss" type="date" name="appointment_date" class="form-control" required></input>
 							            </div>
 							        </div>
 							    </div>
 							
 							    <div class="form-group">
-							        <label for="appointment_datetime" class="col-form-label">Appointment Time</label>
+							        <label for="appointment_datetime" class="col-form-label">Appointment Time <span class="text-danger">*</span></label>
 							        <div class="well">
 							            <div id="datetimepicker1" class="input-group date">
-							                <input id="appointment_time" data-format="dd/MM/yyyy HH:mm:ss" type="time" name="appointment_time" class="form-control"></input>
+							                <input id="appointment_time" data-format="dd/MM/yyyy HH:mm:ss" type="time" name="appointment_time" class="form-control" required></input>
 							            </div>
 							        </div>
 							    </div>

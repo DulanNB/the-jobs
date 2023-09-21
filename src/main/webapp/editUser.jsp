@@ -111,10 +111,15 @@ if (request.getSession(false).getAttribute("User") == null) {
 						    </div>
 						
 						  
-						    <div class="form-group mb-3" style="margin-top: 65px">
+						    	<% 
+								    User loggedInUser = (User) session.getAttribute("User");
+								    if (loggedInUser != null && loggedInUser.getRoleID() == 2) { 
+								%>
+								 <div class="form-group mb-3" style="margin-top: 65px">
 						        <button type="reset" class="btn btn-warning">Reset</button>
 						        <button class="btn btn-success" type="submit">Update</button>
 						    </div>
+								<% } %>
 						    
 						   
 						      <% 

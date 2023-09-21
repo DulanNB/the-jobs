@@ -42,12 +42,16 @@ public class userController extends HttpServlet {
 		        if(action.equals("all") && (roleID == 2)) {
 					getAllUsers(request,response);
 				}
-				else if ( action.equals("by_id") && (roleID == 2)){
+				else if ( action.equals("by_id") && (roleID == 2) || (roleID == 3)) {
 					getSpecificUsers(request,response);
 				}
 				else if(action.equals("update") && (roleID == 2))
 				{
 					updateUser(request,response);
+				}
+				else if(action.equals("delete") && (roleID == 2))
+				{
+					deleteUser(request,response);
 				}
 		         else {
 		            response.sendRedirect("unauthorized.jsp"); 
@@ -203,19 +207,33 @@ public class userController extends HttpServlet {
 
    private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-	   String message = "";
-	   int userID =Integer.parseInt(request.getParameter("userID"));
-	   userService service = new userService();
-	   try {
-		service.deleteUser(userID);
-	   } catch (ClassNotFoundException | SQLException e) {
-		   message = e.getMessage();
-	   }
-
 	   HttpSession session = request.getSession();
-	   session.setAttribute("successMessage", message);
+	    User loggedInUser = (User) session.getAttribute("User");
+       int id = loggedInUser.getUserID();
+       int userID =Integer.parseInt(request.getParameter("id"));
+       System.out.println(id + userID);
+       
+       if(id == userID) {
+   		String encodedMessage = URLEncoder.encode("You cannot delete your profile.", "UTF-8");
+    	response.sendRedirect("/the-jobs/userController?action=all&successMessage="+ encodedMessage);
 
-	   response.sendRedirect("/the-jobs/userController?action=all");
+       }
+       else {
+    	   String message = "";
+    		 
+    	   userService service = new userService();
+    	   try {
+    		service.deleteUser(userID);
+    	   } catch (ClassNotFoundException | SQLException e) {
+    		   message = e.getMessage();
+    	   }
+
+    	   String encodedMessage = URLEncoder.encode("User deleted Successfully.", "UTF-8");
+    	   session.setAttribute("successMessage", message);
+
+    	   response.sendRedirect("/the-jobs/userController?action=all&successMessage="+ encodedMessage);
+       }
+
    }
 
 

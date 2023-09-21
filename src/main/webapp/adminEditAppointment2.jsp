@@ -41,7 +41,7 @@ if (request.getSession(false).getAttribute("User") == null) {
             <div class="container-fluid">
 
 				 <div class="card">
-			        <h5 class="card-header">Edit Items</h5>
+			        <h5 class="card-header">Edit Appoinements</h5>
 			        <div class="card-body">
 									            <%
 						    appoinment appointment = (appoinment) request.getAttribute("appointment");

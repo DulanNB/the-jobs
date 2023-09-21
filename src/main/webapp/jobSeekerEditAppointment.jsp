@@ -114,30 +114,30 @@ if (request.getSession(false).getAttribute("User") == null) {
 								
 								<div class="form-group">
 						        <label for="inputTitle" class="col-form-label">Appointment Note <span class="text-danger">*</span></label>
-						        <textarea id="appointment_note" type="text" name="appointment_note" class="form-control"><%= appointment.getAppoinmentNote() %></textarea>
+						        <textarea id="appointment_note" type="text" name="appointment_note" class="form-control" required><%= appointment.getAppoinmentNote() %></textarea>
 						    </div>
 						
 						    <div class="form-group">
-						        <label for="appointment_date" class="col-form-label">Appointment Date</label>
+						        <label for="appointment_date" class="col-form-label">Appointment Date <span class="text-danger">*</span></label>
 						        <div class="well">
 						            <div id="datetimepicker1" class="input-group date">
-						                <input id="appointment_date" data-format="dd/MM/yyyy HH:mm:ss" type="date" name="appointment_date" class="form-control" value="<%= appointment.getAppoinmentDate() %>">
+						                <input required id="appointment_date" data-format="dd/MM/yyyy HH:mm:ss" type="date" name="appointment_date" class="form-control" value="<%= appointment.getAppoinmentDate() %>">
 						            </div>
 						        </div>
 						    </div>
 						
 						    <div class="form-group">
-						        <label for="appointment_time" class="col-form-label">Appointment Time</label>
+						        <label for="appointment_time" class="col-form-label">Appointment Time <span class="text-danger">*</span></label>
 						        <div class="well">
 						            <div id="datetimepicker1" class="input-group date">
-						                <input id="appointment_time" data-format="dd/MM/yyyy HH:mm:ss" type="time" name="appointment_time" class="form-control" value="<%= appointment.getAppoinmentTime() %>">
+						                <input required id="appointment_time" data-format="dd/MM/yyyy HH:mm:ss" type="time" name="appointment_time" class="form-control" value="<%= appointment.getAppoinmentTime() %>">
 						            </div>
 						        </div>
 						    </div>
 						
 						    <div class="form-group">
 						        <label for="inputCountry" class="col-form-label mb-10">Country Looking For <span class="text-danger">*</span></label>
-						        <select id="country" name="country" class="form-control">
+						        <select id="country" name="country" class="form-control" required>
 						            <option value="" disabled>Select a country</option>
 						            <option value="USA" <%= appointment.getCountry().equals("USA") ? "selected" : "" %>>United States</option>
 						            <option value="CAN" <%= appointment.getCountry().equals("CAN") ? "selected" : "" %>>Canada</option>

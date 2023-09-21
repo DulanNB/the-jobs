@@ -36,4 +36,9 @@ public class userService {
 		// TODO Auto-generated method stub
 		return userDao.getAllConsultants();
 	}
+
+	public boolean userExists(String email) throws ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		return userDao.checkUserExist(email);
+	}
 }

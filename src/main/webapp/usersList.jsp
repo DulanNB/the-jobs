@@ -44,6 +44,36 @@ if (request.getSession(false).getAttribute("User") == null) {
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Users </h1>
                     
+                      <%
+						String successMessage = request.getParameter("successMessage");
+						if (successMessage != null && !successMessage.isEmpty()) {
+						%>
+						<div class="alert alert-success">
+						    <%= successMessage %>
+						</div>
+						<script>
+						    function removeQueryParameter(key) {
+						        var url = window.location.href;
+						        var urlParts = url.split("?");
+						        if (urlParts.length >= 2) {
+						            var params = urlParts[1].split("&");
+						            var newParams = [];
+						            for (var i = 0; i < params.length; i++) {
+						                var param = params[i].split("=");
+						                if (param[0] !== key) {
+						                    newParams.push(params[i]);
+						                }
+						            }
+						            var newUrl = urlParts[0] + "?" + newParams.join("&");
+						            window.history.replaceState({}, document.title, newUrl);
+						        }
+						    }
+						
+						    removeQueryParameter("successMessage");
+						</script>
+						<%
+						}
+						%>
                     
 			                		<% 
 						                // Display the error message if it's available
@@ -129,7 +159,7 @@ if (request.getSession(false).getAttribute("User") == null) {
 								   
 												    if (loggedInUser != null && (loggedInUser.getRoleID() == 2 || loggedInUser.getRoleID() == 1)) { // Assuming user's role_id is 1
 												%>
-												<a method="get" href="<%=request.getContextPath()%>/appoinmentController?action=delete&id=<%= u.getUserID() %>">
+												<a method="get" href="<%=request.getContextPath()%>/userController?action=delete&id=<%= u.getUserID() %>">
 												                    <button class="btn btn-danger">Delete</button>
 												                </a>
 												<% } %>

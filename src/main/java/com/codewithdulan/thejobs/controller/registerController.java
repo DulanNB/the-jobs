@@ -51,20 +51,26 @@ public class registerController extends HttpServlet {
 		   user.setUserPassword(request.getParameter("userPassword"));
 		   user.setRoleID(1);
 		   
-		    boolean result;
-		
-			try {
-				result = service.addUser(user);
-				if(result) {
-					message = "This user has been added successfully! User Name:" + user.getUserName();
-			}
-			else {
-					 message = "Failed to add the user! User Name:" + user.getUserName();
-			}
-			} catch (ClassNotFoundException | SQLException e) {
-				// TODO Auto-generated catch block
-				System.out.println("message = "+e);
-			}
+		   boolean result;
+
+		    try {
+		     
+		        if (service.userExists(user.getEmail())) {
+		        
+		            request.setAttribute("errMessage", "User with the same email already exists!");
+		        } else {
+		            result = service.addUser(user);
+		            if (result) {
+		                message = "You have been registered successfully. Please Go back to login";
+		            } else {
+		                message = "Failed to add the user! User Name:" + user.getUserName();
+		            }
+		        }
+		    } catch (ClassNotFoundException | SQLException e) {
+		  
+		        System.out.println("message = " + e);
+		        message = "An error occurred while processing your request.";
+		    }
 			
 			
 			HttpSession session = request.getSession();
@@ -73,5 +79,7 @@ public class registerController extends HttpServlet {
 		   	System.out.println("message = "+message);
 		   	request.getRequestDispatcher("register.jsp").forward(request, response);
 	}
+	
+	
 
 }
