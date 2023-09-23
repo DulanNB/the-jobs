@@ -109,16 +109,16 @@ if (request.getSession(false).getAttribute("User") == null) {
 						            <option value="3" <% if (User.getRoleID() == 3) { %> selected <% } %>>Consultant</option>
 						        </select>
 						    </div>
-						
-						  
-						    	<% 
-								    User loggedInUser = (User) session.getAttribute("User");
-								    if (loggedInUser != null && loggedInUser.getRoleID() == 2) { 
-								%>
-								 <div class="form-group mb-3" style="margin-top: 65px">
+						<div class="form-group mb-3" style="margin-top: 65px">
 						        <button type="reset" class="btn btn-warning">Reset</button>
 						        <button class="btn btn-success" type="submit">Update</button>
 						    </div>
+						  
+						    	<% 
+								    User loggedInUser = (User) session.getAttribute("User");
+								    if (loggedInUser != null ) { 
+								%>
+								 
 								<% } %>
 						    
 						   
