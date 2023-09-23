@@ -54,11 +54,7 @@
      	<artifactId>sample-maven-for-batch15</artifactId>
      	<version>0.0.1-SNAPSHOT</version>
      </dependency>
-     <dependency>
-     	<groupId>new-mobile1</groupId>
-     	<artifactId>new-mobile1</artifactId>
-     	<version>0.0.1-SNAPSHOT</version>
-     </dependency>
+    
      <dependency>
      	<groupId>com.dulan.maven</groupId>
      	<artifactId>code-with-dulan</artifactId>

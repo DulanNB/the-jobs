@@ -18,7 +18,7 @@ import com.codewithdulan.thejobs.dao.appointmentDao;
 import com.codewithdulan.thejobs.model.User;
 import com.codewithdulan.thejobs.service.appoinmentService;
 import com.codewithdulan.thejobs.service.userService;
-import com.codewithkrish.newmobile.service.UserService;
+
 
 /**
  * Servlet implementation class appoinmentController
